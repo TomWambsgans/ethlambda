@@ -23,3 +23,16 @@ rustflags = [
     "-Ctarget-cpu=neoverse-n1",
     "-Ctarget-feature=+aes,+sha2,+neon",
 ]
+
+# Supply-chain cooldown for dependency resolution (unstable min-publish-age,
+# tracking issue rust-lang/cargo#17009): crate versions published less than
+# 14 days ago are excluded when the resolver runs on a nightly cargo.
+# Stable cargo ignores these tables silently, so builds from the committed
+# Cargo.lock are unaffected; run `make update` to resolve under the policy.
+# When the feature stabilizes, drop the [unstable] table and the nightly
+# resolver pin in the Makefile: the policy then binds all resolution.
+[unstable]
+min-publish-age = true
+
+[registry]
+global-min-publish-age = "14 days"
